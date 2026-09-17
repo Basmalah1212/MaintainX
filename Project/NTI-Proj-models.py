@@ -214,18 +214,20 @@ def fault_state_model(df):
     x_train, x_test, y_train, y_test = split(x,fault_state)
     preprocessor = preprocess(x)
 
-    x_train = preprocessor.fit_transform(x_train)
-    x_test = preprocessor.transform(x_test)
+    pipeline = Pipeline([
+        ('preprocessor', preprocessor),
+        ('model', LogisticRegression(C=10, max_iter=10000, random_state=42))
+    ])
 
-    log_model = LogisticRegression(C=10,max_iter=10000,random_state=42)
-    log_model.fit(x_train, y_train)
-    y_pred_log = log_model.predict(x_test)
-    y_pred_train_log = log_model.predict(x_train)
+    pipeline.fit(x_train, y_train)
+    y_pred_log = pipeline.predict(x_test)
+    y_pred_train_log = pipeline.predict(x_train)
     print(evaluate_model('Logistic Regression', y_test, y_pred_log))
     print(evaluate_model('Logistic Regression Train', y_train, y_pred_train_log))
 
-    log_model.fit(x, fault_state)
-    joblib.dump(log_model, "fault_state_model.pkl")
+    pipeline.fit(x, fault_state)
+    joblib.dump(pipeline, "fault_state_model.pkl")
+
     
 def RUL_model(df):
     x = df.drop(['maintenance_required', 'remaining_useful_life_h','anomaly_score', 'fault_state'], axis=1)
