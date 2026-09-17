@@ -174,14 +174,6 @@ def maintenance_model(df):
         y_pred_test
     ))
 
-    print("Train Accuracy:", accuracy_score(y_train, y_pred_train))
-    print("Test Accuracy:",  accuracy_score(y_test, y_pred_test))
-    print("Train F1:",       f1_score(y_train, y_pred_train))
-    print("Test F1:",        f1_score(y_test, y_pred_test))
-    print("Test Recall:",    recall_score(y_test, y_pred_test))
-
-    print("\nClassification Report:")
-    print(classification_report(y_test, y_pred_test))
 
     xgb_pipeline.fit(x, y)
     joblib.dump(xgb_pipeline, "maintenance_model.pkl")   
@@ -270,4 +262,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
