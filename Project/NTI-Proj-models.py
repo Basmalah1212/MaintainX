@@ -110,7 +110,28 @@ def remove_majority_outliers(x, y):
     removed_count = int(majority_outliers.sum())
     print(f"Removed {removed_count} outlier(s) from majority class {majority_label}")
     return x.loc[keep_rows], y.loc[keep_rows]
+    
+def evaluate_model(name, y_true, y_pred):
+    return {
+        'Model': name,
+        'Accuracy': accuracy_score(y_true, y_pred),
+        'Precision (macro)': precision_score(y_true, y_pred, average='macro'),
+        'Recall (macro)': recall_score(y_true, y_pred, average='macro'),
+        'F1-score (macro)': f1_score(y_true, y_pred, average='macro')
+    }
+def preprocess(x):
+    num_cols = x.select_dtypes(include=['number']).columns.tolist()
+    return ColumnTransformer([
+        ('scaler', StandardScaler(), num_cols),
+    ])
 
+def evaluate_numeric(name, y_true, y_pred):
+    return {
+            'Model': name,
+            'MAE': mean_absolute_error(y_true, y_pred),
+            'R2': r2_score(y_true, y_pred),
+        }
+    
 def maintenance_model(df):
     x = df.drop([
         'maintenance_required',
@@ -184,26 +205,7 @@ def anomaly_model(df):
     pipeline.fit(x, anomaly_score)
     joblib.dump(pipeline, "anomaly_model.pkl")
 
-def evaluate_numeric(name, y_true, y_pred):
-    return {
-            'Model': name,
-            'MAE': mean_absolute_error(y_true, y_pred),
-            'R2': r2_score(y_true, y_pred),
-        }
 
-def evaluate_model(name, y_true, y_pred):
-    return {
-        'Model': name,
-        'Accuracy': accuracy_score(y_true, y_pred),
-        'Precision (macro)': precision_score(y_true, y_pred, average='macro'),
-        'Recall (macro)': recall_score(y_true, y_pred, average='macro'),
-        'F1-score (macro)': f1_score(y_true, y_pred, average='macro')
-    }
-def preprocess(x):
-    num_cols = x.select_dtypes(include=['number']).columns.tolist()
-    return ColumnTransformer([
-        ('scaler', StandardScaler(), num_cols),
-    ])
 
 def fault_state_model(df):
     od = OrdinalEncoder(categories=[['Warning', 'Critical']])
