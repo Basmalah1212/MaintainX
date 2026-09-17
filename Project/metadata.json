@@ -1,0 +1,26 @@
+{
+  "random_state": 42,
+  "feature_cols": [
+    "plant_zone", "process_type", "ambient_temperature_c", "ambient_humidity_pct",
+    "dsc_heat_flow_mw", "sample_temperature_c", "reference_temperature_c",
+    "thermal_gradient_c", "heating_rate_c_min", "cooling_rate_c_min",
+    "infrared_mean_temp_c", "infrared_max_temp_c", "thermal_hotspot_area_pct",
+    "phase_transition_onset_c", "phase_transition_peak_c", "transition_enthalpy_j_g",
+    "heat_dissipation_rate_w", "sensor_voltage_v", "sensor_current_ma",
+    "vibration_level_mm_s", "mqtt_latency_ms", "packet_loss_pct",
+    "edge_cpu_usage_pct", "rolling_noise_index"
+  ],
+  "target_cols": [
+    "maintenance_required", "fault_type", "fault_state", "remaining_useful_life_h"
+  ],
+  "fault_state_classes": ["Normal", "Warning", "Critical"],
+  "fault_type_classes": [
+    "compound_thermal_instability", "heat_dissipation_failure",
+    "incipient_overheating", "minor_phase_transition_shift", "none",
+    "phase_transition_irregularity", "reduced_heat_dissipation",
+    "sensor_drift", "severe_overheating"
+  ],
+  "n_train_rows": 4000,
+  "n_test_rows": 1000,
+  "n_test_equipment": 30
+}
